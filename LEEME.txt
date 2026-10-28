@@ -1,8 +1,18 @@
+BLUE — ARCHIVOS COMPLETOS PARA GITHUB
 
+Sube TODOS estos archivos directamente a la raíz del repositorio calculadora-blue:
+- index.html
+- manifest.json
+- sw.js
+- icon-192.png
+- icon-512.png
 
-CONVERSIÓN A LEMPIRAS:
-El total en HNL se calcula multiplicando el precio final en USD por la tasa editable (L por USD). La tasa inicial L 26.50 es solo un valor de ejemplo; actualízala según la tasa que utilices.
+Pasos:
+1. Abre tu repositorio en GitHub.
+2. Add file > Upload files.
+3. Selecciona los archivos anteriores (no la carpeta contenedora).
+4. Pulsa Commit changes.
+5. Settings > Pages > Deploy from a branch > main > /(root) > Save.
 
-
-TASA DE CAMBIO EDITABLE:
-El campo de tasa de cambio queda vacío de forma predeterminada. Ingresa la tasa vigente (lempiras por dólar) para calcular la conversión. Si no ingresas una tasa, el precio en dólares se sigue calculando y la conversión a lempiras muestra un aviso.
+El campo de tasa de cambio debe ser editable para que ingreses la tasa que utilices.
+El service worker habilita caché para uso básico sin conexión después de abrir la app en HTTPS.
