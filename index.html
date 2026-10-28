@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BLUE · Calculadora</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1434f3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BLUE Calculadora">
+<style>
+:root{--blue:#1434f3;--blue2:#0c25b8;--ink:#172033;--muted:#667085;--line:#e3e8f2;--bg:#f5f7fc;--white:#fff;--yellow:#ffd84d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink)}
+.wrap{max-width:1000px;margin:0 auto;padding:24px 16px 40px}
+header{background:linear-gradient(125deg,var(--blue),var(--blue2));color:white;padding:24px;border-radius:20px;margin-bottom:20px;display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}
+.kicker{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.85}.brand{font-size:30px;font-weight:900;letter-spacing:-.04em;margin:4px 0}.sub{opacity:.88;font-size:14px}.pill{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:700}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.85fr);gap:18px;align-items:start}
+.card{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(18,35,90,.04)}
+h2{font-size:17px;margin:0 0 18px;letter-spacing:-.02em}.field{margin-bottom:16px}.field label{display:flex;justify-content:space-between;gap:12px;font-size:13px;font-weight:750;margin-bottom:7px}.hint{font-weight:500;color:var(--muted);font-size:12px}
+.inputbox{display:flex;align-items:center;border:1px solid #d7deeb;border-radius:11px;overflow:hidden;background:white}.prefix{padding:0 12px;color:#536078;background:#f7f9fd;border-right:1px solid var(--line);height:46px;display:flex;align-items:center;font-weight:700}.inputbox input{width:100%;min-width:0;border:0;outline:0;padding:12px;font:inherit;font-size:16px;color:var(--ink)}.inputbox:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,52,243,.1)}
+.note{background:#f1f4ff;border:1px solid #dbe2ff;border-radius:12px;padding:12px;font-size:12px;color:#35416e;line-height:1.5}
+.result{background:#101b40;color:white;border-radius:18px;padding:22px;overflow:hidden;position:relative}.result:after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;background:rgba(20,52,243,.28);right:-55px;top:-70px}.result>*{position:relative;z-index:1}.result .label{font-size:12px;color:#c8d2ff;font-weight:700;text-transform:uppercase;letter-spacing:.09em}.price{font-size:clamp(32px,5vw,44px);font-weight:900;letter-spacing:-.04em;margin:7px 0 4px;overflow-wrap:anywhere}.small{font-size:12px;color:#c8d2ff}.divider{height:1px;background:rgba(255,255,255,.16);margin:18px 0}.row{display:flex;justify-content:space-between;gap:12px;margin:12px 0;font-size:13px}.row span:first-child{color:#d2d9f3}.row strong{white-space:nowrap}.finalrow{border-top:1px solid rgba(255,255,255,.2);padding-top:14px;margin-top:16px;font-size:15px}.finalrow strong{color:var(--yellow);font-size:18px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:pointer;font-size:13px;min-height:44px}.primary{background:var(--blue);color:white}.secondary{background:white;color:var(--blue);border:1px solid #cdd6ff}.foot{margin-top:16px;color:var(--muted);font-size:11px;line-height:1.5}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.wrap{padding:14px 12px 28px}header{padding:20px}.card{padding:18px}.brand{font-size:26px}}
+@media print{body{background:white}.wrap{max-width:none;padding:0}header{print-color-adjust:exact;-webkit-print-color-adjust:exact}.grid{grid-template-columns:1fr 1fr}.card,.result{box-shadow:none;break-inside:avoid}.actions{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+<header>
+ <div><div class="kicker">Herramienta de costos</div><div class="brand">BLUE <span style="color:#ffd84d">/</span> Calculadora</div><div class="sub">Calcula el precio final de tus productos importados.</div></div>
+ <div class="pill">USD · Cálculo instantáneo</div>
+</header>
+<div class="grid">
+ <section class="card">
+  <h2>1. Ingresa los costos</h2>
+  <div class="field">
+   <label for="base">Precio del producto <span class="hint">Precio de compra</span></label>
+   <div class="inputbox"><span class="prefix">$</span><input id="base" type="number" min="0" step="0.01" value="100" inputmode="decimal"></div>
+  </div>
+  <div class="field">
+   <label for="tax">Impuesto <span class="hint">12% del producto</span></label>
+   <div class="inputbox"><input id="tax" type="number" min="0" max="100" step="0.1" value="12" inputmode="decimal"><span class="prefix">%</span></div>
+  </div>
+  <div class="field">
+   <label for="freight">Flete aéreo <span class="hint">Monto fijo</span></label>
+   <div class="inputbox"><span class="prefix">$</span><input id="freight" type="number" min="0" step="0.01" value="30" inputmode="decimal"></div>
+  </div>
+  <div class="field">
+   <label for="commission">Comisión <span class="hint">Porcentaje configurable</span></label>
+   <div class="inputbox"><input id="commission" type="number" min="0" max="100" step="0.1" value="12" inputmode="decimal"><span class="prefix">%</span></div>
+  </div>
+  <div class="field">
+   <label for="exchange">Tasa de cambio <span class="hint">Lempiras por dólar</span></label>
+   <div class="inputbox"><span class="prefix">L</span><input id="exchange" type="number" min="0" step="0.0001" value="" placeholder="Ingresa la tasa actual" inputmode="decimal" aria-describedby="exchangeHint"></div>
+   <div class="hint" id="exchangeHint" style="margin-top:6px">Ingresa la tasa vigente; no se establece una tasa predeterminada.</div>
+  </div>
+  <div class="note"><strong>Cómo se calcula:</strong> impuesto = precio × 12%; comisión = 12% del subtotal con impuesto y flete. Puedes cambiar los porcentajes si lo necesitas.</div>
+  <div class="actions"><button class="btn primary" id="reset" type="button">Restablecer valores</button><button class="btn secondary" id="print" type="button">Imprimir / Guardar PDF</button></div>
+ </section>
+ <section>
+  <div class="result" aria-live="polite">
+   <div class="label">Precio final estimado</div>
+   <div class="price" id="final">$0.00</div>
+   <div class="small">Dólares estadounidenses (USD)</div>
+   <div class="divider"></div>
+   <div class="row"><span>Precio del producto</span><strong id="rBase">$0.00</strong></div>
+   <div class="row"><span>Impuesto</span><strong id="rTax">$0.00</strong></div>
+   <div class="row"><span>Flete aéreo</span><strong id="rFreight">$0.00</strong></div>
+   <div class="row"><span>Subtotal antes de comisión</span><strong id="rSub">$0.00</strong></div>
+   <div class="row"><span>Comisión</span><strong id="rCommission">$0.00</strong></div>
+   <div class="row finalrow"><span>Total a considerar</span><strong id="rFinal">$0.00</strong></div>
+   <div class="divider"></div>
+   <div class="label">Conversión a lempiras</div>
+   <div class="price" id="finalHnl" style="color:#ffd84d">L 0.00</div>
+   <div class="small">Lempiras hondureños (HNL)</div>
+   <div class="row"><span>Tasa aplicada</span><strong id="rExchange">Ingresa la tasa de cambio</strong></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+   <h2 style="margin-bottom:10px">Resumen de fórmula</h2>
+   <div id="formula" style="font-size:13px;line-height:1.65;color:#536078">Precio + impuesto + flete + comisión.</div>
+  </div>
+ </section>
+</div>
+<div class="foot">Importante: esta versión calcula la comisión sobre el subtotal (producto + impuesto + flete). Si tu comisión se calcula solo sobre el precio del producto, la fórmula debe ajustarse. La conversión a lempiras utiliza la tasa editable que aparece en pantalla; verifica y actualiza la tasa según tu banco o proveedor. El archivo funciona localmente en XAMPP y también puede publicarse en un hosting estático; Supabase solo sería necesario para guardar cálculos o compartir datos entre usuarios.</div>
+</div>
+<script>
+(function(){
+ const ids=['base','tax','freight','commission','exchange'];
+ const el=id=>document.getElementById(id);
+ const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:2}).format(Number.isFinite(n)?n:0);
+ function val(id){const n=Number.parseFloat(el(id).value);return Number.isFinite(n)?Math.max(0,n):0}
+ function calculate(){
+  const base=val('base'),taxRate=Math.min(100,val('tax')),freight=val('freight'),commissionRate=Math.min(100,val('commission')),exchange=val('exchange');
+  const exchangeEntered=el('exchange').value.trim()!=='' && Number.parseFloat(el('exchange').value)>0;
+  const tax=base*taxRate/100,sub=base+tax+freight,commission=sub*commissionRate/100,final=sub+commission,finalHnl=final*exchange;
+  el('final').textContent=money(final);el('rBase').textContent=money(base);el('rTax').textContent=money(tax);el('rFreight').textContent=money(freight);el('rSub').textContent=money(sub);el('rCommission').textContent=money(commission);el('rFinal').textContent=money(final);
+  el('finalHnl').textContent=exchangeEntered ? new Intl.NumberFormat('es-HN',{style:'currency',currency:'HNL',minimumFractionDigits:2,maximumFractionDigits:2}).format(finalHnl) : 'Ingresa la tasa';
+  el('rExchange').textContent=exchangeEntered ? ('L '+exchange.toFixed(4)+' por USD') : 'Tasa pendiente';
+  el('formula').textContent=exchangeEntered
+   ? `${money(base)} + ${money(tax)} de impuesto + ${money(freight)} de flete + ${money(commission)} de comisión = ${money(final)}. Conversión: ${money(final)} × L ${exchange.toFixed(4)} = ${new Intl.NumberFormat('es-HN',{style:'currency',currency:'HNL',minimumFractionDigits:2,maximumFractionDigits:2}).format(finalHnl)}.`
+   : `${money(base)} + ${money(tax)} de impuesto + ${money(freight)} de flete + ${money(commission)} de comisión = ${money(final)}. Para convertir a lempiras, ingresa la tasa de cambio actual.`;
+ }
+ ids.forEach(id=>el(id).addEventListener('input',calculate));
+ el('reset').addEventListener('click',()=>{el('base').value='100';el('tax').value='12';el('freight').value='30';el('commission').value='12';el('exchange').value='';calculate()});
+ el('print').addEventListener('click',()=>window.print());
+ calculate();
+ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+   window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+ }
+})();
+</script>
+</body>
+</html>

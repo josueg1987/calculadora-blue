@@ -1,0 +1,8 @@
+
+
+CONVERSIÓN A LEMPIRAS:
+El total en HNL se calcula multiplicando el precio final en USD por la tasa editable (L por USD). La tasa inicial L 26.50 es solo un valor de ejemplo; actualízala según la tasa que utilices.
+
+
+TASA DE CAMBIO EDITABLE:
+El campo de tasa de cambio queda vacío de forma predeterminada. Ingresa la tasa vigente (lempiras por dólar) para calcular la conversión. Si no ingresas una tasa, el precio en dólares se sigue calculando y la conversión a lempiras muestra un aviso.
